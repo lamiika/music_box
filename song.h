@@ -9,6 +9,7 @@ struct Note {
 };
 
 Note grace[] = {
+  {100, 1, 1},
   {NOTE_CS4, 32, 1},
   {NOTE_E4, 4/1.5, 1},
   {NOTE_GS4, 8, 1},
@@ -136,6 +137,7 @@ Note grace[] = {
 };
 
 Note in_your_face[] = {
+  {140, 1, 2},
   {NOTE_C3, 8, 4}, 
   {0, 8, 1},
   {NOTE_C3, 8, 6}, 

@@ -18,54 +18,35 @@ void loop() {
   unsigned long ticks = millis();
   char key = keypad.getKey();
 
-  if (key) {
-    songPlay(key);
+  switch(key) {
+    size_t song_length;
+    case '1':
+      song_length = sizeof(in_your_face) / sizeof(Note);
+      playSong(in_your_face, song_length);
+      break;
+    case '2':
+      song_length = sizeof(grace) / sizeof(Note);
+      playSong(grace, song_length);
+      break;
+    default:
+      break;
   }
-/*
-  if (key == '1') {
-    setTempo(140);
-    playSong(in_your_face);
-  }
-
-  if (key == '2') {
-    setTempo(100);
-    playSong(grace);
-  }
-*/
 }
 
 void setTempo(uint32_t value) {
   whole_note = 4*60/value*1000;
 }
 
-void playSong(Note song_name[]) {
+void playSong(Note song_name[], size_t song_length) {
   uint32_t previousMillis = millis();
-  for (int i = 0; i < sizeof(song_name) / sizeof(Note); i++) {
-    for (int j = 0; j < song_name[i].repetitions; j++) {
-      playNote(pin, song_name[i].frequency, song_name[i].division);
-    }
-  }
-}
+  setTempo(song_name[0].frequency);
+  uint16_t repetitions = song_name[0].repetitions;
 
-void songPlay(int option) {
-  if (option == '*') {
-    setTempo(100);
-    for (int i = 0; i < sizeof(grace) / sizeof(Note); i++) {
-      for (int j = 0; j < grace[i].repetitions; j++) {
-        playNote(pin, grace[i].frequency, grace[i].division);
-      }
-    }
-  }
-  if (option == '0') {
-    setTempo(140);
-    for (int i = 0; i < sizeof(in_your_face) / sizeof(Note); i++) {
-      for (int j = 0; j < in_your_face[i].repetitions; j++) {
-        playNote(pin, in_your_face[i].frequency, in_your_face[i].division);
-      }
-    }
-    for (int i = 0; i < sizeof(in_your_face) / sizeof(Note); i++) {
-      for (int j = 0; j < in_your_face[i].repetitions; j++) {
-        playNote(pin, in_your_face[i].frequency, in_your_face[i].division);
+  for (int times_played = 0; times_played < repetitions; times_played++) {
+    for (int note_index = 1; note_index < song_length; note_index++) {
+      // 0 index used for metadata ^
+      for (int repeat_note = 0; repeat_note < song_name[note_index].repetitions; repeat_note++) {
+        playNote(pin, song_name[note_index].frequency, song_name[note_index].division);
       }
     }
   }
